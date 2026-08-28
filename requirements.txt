@@ -2,3 +2,4 @@ anthropic>=1.0
 python-telegram-bot[job-queue]>=21.6
 notion-client>=2.2
 python-dotenv>=1.0
+flask>=3.0

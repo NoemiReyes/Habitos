@@ -120,6 +120,67 @@ agente mide **constancia**, no perfección.
 
 ---
 
+## ⌚ Conectar tu Apple Watch (opcional)
+
+Los datos de tu Apple Watch viven en la app **Salud** de tu iPhone; Apple no
+tiene un servidor al que el bot pueda conectarse. La solución: tu iPhone **envía**
+los datos al bot una vez al día con un **Atajo de Apple** (gratis, sin apps extra).
+
+Así, tu sueño y tu ejercicio se llenan solos, y tú solo completas lo demás
+(clientes, finanzas, alimentación).
+
+### 1) Activa el buzón en el bot
+
+En tu `.env`, inventa una palabra secreta:
+
+```
+WEBHOOK_TOKEN=mi-palabra-secreta-123
+```
+
+El bot necesita una **URL pública** para recibir los datos, así que esto funciona
+cuando el bot está en un hosting (ver la sección de abajo). Tu URL será algo como
+`https://tu-app.up.railway.app/apple`.
+
+### 2) Crea el Atajo en tu iPhone
+
+Abre la app **Atajos** → **+** (nuevo atajo) y agrega estas acciones:
+
+1. **Buscar muestras de salud** → Tipo: *Análisis del sueño*. Ordenar por *fecha
+   de finalización*, límite 1. Luego **Obtener detalle** → *Fecha de finalización*
+   y **Formatear fecha** solo como hora `HH:mm`. (Esta es tu hora de despertar.)
+2. **Buscar muestras de salud** → Tipo: *Tiempo de ejercicio*, rango *Hoy*,
+   operación *Sumar*. (Estos son tus minutos de ejercicio.)
+3. *(Opcional)* **Buscar muestras de salud** → Tipo: *Pasos*, *Hoy*, *Sumar*.
+4. **Obtener contenido de la URL**:
+   - URL: `https://tu-app.up.railway.app/apple`
+   - Método: **POST**
+   - Encabezados: `Content-Type` = `application/json`
+   - Cuerpo de la solicitud: **JSON**, con estos campos (usa las variables de los
+     pasos anteriores):
+
+   ```json
+   {
+     "token": "mi-palabra-secreta-123",
+     "levantarse_hora": "07:10",
+     "ejercicio_min": 25,
+     "pasos": 8000
+   }
+   ```
+
+> 💡 Empieza simple: si el sueño te complica, manda solo `token` y `ejercicio_min`.
+> El buzón acepta lo que le mandes y conserva lo demás.
+
+### 3) Automatízalo
+
+En Atajos → pestaña **Automatización** → **+** → *Hora del día* (ej. 7:15 a.m.)
+o *Al despertar* → ejecuta tu atajo → activa **"Ejecutar inmediatamente"** (sin
+preguntar). Listo: cada mañana tus datos llegan solos y el bot te avisa por
+Telegram lo que recibió.
+
+> Los nombres exactos de las acciones pueden variar según tu versión de iOS.
+
+---
+
 ## ⏰ Para que los recordatorios funcionen 24/7
 
 Los recordatorios solo llegan mientras `python bot.py` esté **corriendo**. Opciones:
@@ -147,6 +208,7 @@ con la API de Claude para interpretarlos y responderte.
 | `bot.py` | El bot de Telegram y los recordatorios. **Este es el que ejecutas.** |
 | `coach.py` | Interpreta tus mensajes y genera las respuestas del coach (Claude). |
 | `notion_store.py` | Guarda en Notion y calcula tus rachas/constancia. |
+| `webhook.py` | El "buzón" que recibe los datos de tu Apple Watch (opcional). |
 | `config.py` | Tus hábitos, metas y ajustes. |
 | `setup_notion.py` | Crea la tabla de Notion (se usa una sola vez). |
 | `.env` | Tus claves secretas (lo creas tú, no se sube a internet). |

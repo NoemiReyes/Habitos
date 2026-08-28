@@ -204,6 +204,13 @@ def main() -> None:
     app.add_handler(CommandHandler("resumen", cmd_resumen))
     app.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, registrar))
 
+    # Si configuraste el webhook, enciende el buzón para tu Apple Watch.
+    if config.WEBHOOK_TOKEN:
+        import webhook
+
+        webhook.iniciar_en_hilo()
+        log.info("Buzón de Apple Watch activo en el puerto %s.", config.WEBHOOK_PORT)
+
     log.info("Bot en marcha. Abre Telegram y escribe /start a tu bot.")
     app.run_polling()
 

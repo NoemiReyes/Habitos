@@ -26,6 +26,16 @@ NOTION_DATABASE_ID = os.getenv("NOTION_DATABASE_ID", "")
 COACH_MODEL = os.getenv("COACH_MODEL", "claude-opus-5")
 
 # ---------------------------------------------------------------------------
+# Webhook para Apple Watch (Atajos de Apple)
+# ---------------------------------------------------------------------------
+# Si defines WEBHOOK_TOKEN en tu .env, el bot abrirá un "buzón" web para recibir
+# los datos que tu iPhone le mande (sueño, ejercicio...). Debe ser una palabra
+# secreta que tú inventes; la misma que pondrás en el Atajo de tu iPhone.
+WEBHOOK_TOKEN = os.getenv("WEBHOOK_TOKEN", "")
+# Puerto donde escucha el buzón. En hostings como Railway/Render se usa PORT.
+WEBHOOK_PORT = int(os.getenv("PORT", os.getenv("WEBHOOK_PORT", "8080")))
+
+# ---------------------------------------------------------------------------
 # Horas de recordatorio (formato 24h, hora local del servidor donde corre)
 # ---------------------------------------------------------------------------
 HORA_RECORDATORIO_MANANA = os.getenv("HORA_MANANA", "07:00")
