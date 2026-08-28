@@ -19,6 +19,7 @@ import asyncio
 import datetime as dt
 import json
 import logging
+import os
 from pathlib import Path
 
 from telegram import Update
@@ -204,12 +205,13 @@ def main() -> None:
     app.add_handler(CommandHandler("resumen", cmd_resumen))
     app.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, registrar))
 
-    # Si configuraste el webhook, enciende el buzón para tu Apple Watch.
-    if config.WEBHOOK_TOKEN:
+    # Enciende el buzón para tu Apple Watch si lo configuraste, o siempre que
+    # corras en un hosting (Railway/Render definen la variable PORT).
+    if config.WEBHOOK_TOKEN or os.environ.get("PORT"):
         import webhook
 
         webhook.iniciar_en_hilo()
-        log.info("Buzón de Apple Watch activo en el puerto %s.", config.WEBHOOK_PORT)
+        log.info("Buzón activo en el puerto %s.", config.WEBHOOK_PORT)
 
     log.info("Bot en marcha. Abre Telegram y escribe /start a tu bot.")
     app.run_polling()

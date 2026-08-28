@@ -186,10 +186,10 @@ Telegram lo que recibió.
 Los recordatorios solo llegan mientras `python bot.py` esté **corriendo**. Opciones:
 
 - **Fácil de probar:** déjalo corriendo en tu computadora (mientras esté encendida).
-- **Siempre activo (recomendado):** súbelo a un hosting gratuito como
-  [Railway](https://railway.app/), [Render](https://render.com/) o
-  [PythonAnywhere](https://www.pythonanywhere.com/). Ahí configuras las mismas
-  variables del `.env` y el bot vive en la nube.
+- **Siempre activo (recomendado):** súbelo a la nube con
+  [Railway](https://railway.app/). Tienes la guía paso a paso en
+  **[DEPLOY.md](DEPLOY.md)** (incluye cómo poner tus claves y obtener la URL
+  pública que necesita tu Apple Watch).
 
 ---
 
