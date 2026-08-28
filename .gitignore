@@ -1,0 +1,12 @@
+# Secretos y datos locales — NUNCA subir
+.env
+suscriptores.json
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+env/
+*.egg-info/
+.pytest_cache/
