@@ -201,18 +201,23 @@ def _fila(page: dict) -> dict:
 
 
 def calcular_estadisticas() -> dict:
+    """Lee Notion y calcula la constancia. Envoltorio de la función pura."""
+    filas = [_fila(p) for p in _todas_las_paginas()]
+    filas = [f for f in filas if f["fecha"]]
+    return estadisticas_desde_filas(filas)
+
+
+def estadisticas_desde_filas(filas: list[dict], hoy: dt.date | None = None) -> dict:
     """
-    Devuelve un diccionario con la constancia del usuario:
+    Cálculo puro de la constancia (sin tocar Notion, para poder probarlo):
       - racha_registro: días seguidos (hasta hoy) que registró algo
       - racha_levantarse: días seguidos cumpliendo la meta de levantarse
       - cumplimiento_7d: % de días (de los últimos 7) que cumplió cada hábito
       - promedio_puntaje_7d: puntaje promedio de la última semana
     """
-    filas = [_fila(p) for p in _todas_las_paginas()]
-    filas = [f for f in filas if f["fecha"]]
     por_fecha = {f["fecha"]: f for f in filas}
 
-    hoy = dt.date.today()
+    hoy = hoy or dt.date.today()
     metas = config.METAS
 
     def cumple_levantarse(f):

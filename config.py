@@ -71,6 +71,29 @@ PESOS = {
 }
 
 # ---------------------------------------------------------------------------
+# ÁREAS (facetas) del coach — el diseño modular.
+# ---------------------------------------------------------------------------
+# El agente es UN solo coach con varias facetas. Cada área tiene su comando
+# (/salud, /finanzas...). Hoy solo "salud" está activa (Fase 1); las demás
+# responden un mensaje de "próximamente" hasta que las construyamos.
+# Para activar una faceta en el futuro: pon "activa": True y sigue la guía de
+# CLAUDE.md ("Cómo agregar una faceta nueva").
+AREAS = [
+    {"clave": "salud",    "nombre": "Salud y alimentación",       "emoji": "🥗", "comando": "salud",    "fase": 1, "activa": True},
+    {"clave": "finanzas", "nombre": "Finanzas personales",        "emoji": "💰", "comando": "finanzas", "fase": 2, "activa": False},
+    {"clave": "mente",    "nombre": "Mentalidad y crecimiento",   "emoji": "🧠", "comando": "mente",    "fase": 3, "activa": False},
+    {"clave": "negocio",  "nombre": "Negocio y clientes",         "emoji": "🤝", "comando": "negocio",  "fase": 3, "activa": False},
+    {"clave": "diario",   "nombre": "Diario y reflexión",         "emoji": "📖", "comando": "diario",   "fase": 4, "activa": False},
+]
+
+# Área por defecto cuando escribes sin elegir foco.
+AREA_POR_DEFECTO = "salud"
+
+
+def area_por_clave(clave: str) -> dict | None:
+    return next((a for a in AREAS if a["clave"] == clave), None)
+
+# ---------------------------------------------------------------------------
 # Nombres de las columnas en tu base de datos de Notion.
 # Deben coincidir EXACTAMENTE con las propiedades de tu base.
 # El script setup_notion.py crea la base con estos nombres automáticamente.

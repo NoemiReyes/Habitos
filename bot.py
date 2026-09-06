@@ -71,21 +71,46 @@ async def cmd_start(update: Update, ctx: ContextTypes.DEFAULT_TYPE) -> None:
         "clientes y aparté para ahorro»_\n\n"
         "Yo lo registro en Notion, llevo tus rachas y te acompaño. "
         "Te escribiré en la mañana y en la noche.\n\n"
-        "Comandos: /resumen para ver tu constancia · /ayuda",
+        "Soy un solo coach que irá creciendo por áreas 🌱. "
+        "Escribe /ayuda para verlas, o /resumen para tu constancia.",
         parse_mode=ParseMode.MARKDOWN,
     )
 
 
 async def cmd_ayuda(update: Update, ctx: ContextTypes.DEFAULT_TYPE) -> None:
+    lineas = ["Soy un solo coach con varias *facetas*. Hoy activa:\n"]
+    for a in config.AREAS:
+        if a["activa"]:
+            lineas.append(f"{a['emoji']} /{a['comando']} — {a['nombre']}")
+        else:
+            lineas.append(f"🔒 /{a['comando']} — {a['nombre']} _(Fase {a['fase']})_")
     await update.message.reply_text(
-        "Escríbeme en lenguaje normal lo que hiciste hoy y yo lo registro.\n\n"
-        "Llevo el seguimiento de:\n"
-        "⏰ Hora de levantarte\n🥗 Alimentación\n🏃 Ejercicio\n"
-        "🤝 Clientes contactados\n💰 Finanzas\n📚 Crecimiento personal/profesional\n\n"
-        "Puedes registrar por partes: mándame cosas en la mañana y completar en la "
-        "noche; junto todo en el mismo día.\n\n"
-        "/resumen → tus rachas y % de constancia."
+        "\n".join(lineas)
+        + "\n\nEscríbeme en lenguaje normal lo que hiciste hoy y yo lo registro. "
+        "Puedes hacerlo por partes: algo en la mañana y completar en la noche.\n\n"
+        "/resumen → tus rachas y % de constancia.",
+        parse_mode=ParseMode.MARKDOWN,
     )
+
+
+def _hacer_handler_area(area: dict):
+    """Crea el manejador del comando de una faceta (ej. /salud, /finanzas)."""
+
+    async def handler(update: Update, ctx: ContextTypes.DEFAULT_TYPE) -> None:
+        if area["activa"]:
+            ctx.user_data["area"] = area["clave"]
+            await update.message.reply_text(
+                f"{area['emoji']} Modo *{area['nombre']}* activado. Cuéntame.",
+                parse_mode=ParseMode.MARKDOWN,
+            )
+        else:
+            await update.message.reply_text(
+                f"{area['emoji']} *{area['nombre']}* llegará en la *Fase {area['fase']}* 🌱.\n"
+                "Por ahora estamos en tu salud y hábitos del día. Escríbeme cómo te fue.",
+                parse_mode=ParseMode.MARKDOWN,
+            )
+
+    return handler
 
 
 async def cmd_resumen(update: Update, ctx: ContextTypes.DEFAULT_TYPE) -> None:
@@ -203,6 +228,10 @@ def main() -> None:
     app.add_handler(CommandHandler("start", cmd_start))
     app.add_handler(CommandHandler("ayuda", cmd_ayuda))
     app.add_handler(CommandHandler("resumen", cmd_resumen))
+    # Un comando por faceta (/salud, /finanzas, ...). Las inactivas responden
+    # "próximamente"; así el diseño modular ya está en pie desde la Fase 1.
+    for area in config.AREAS:
+        app.add_handler(CommandHandler(area["comando"], _hacer_handler_area(area)))
     app.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, registrar))
 
     # Enciende el buzón para tu Apple Watch si lo configuraste, o siempre que

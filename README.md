@@ -98,8 +98,28 @@ Abre Telegram, busca tu bot y envíale **/start**. Listo 🎉
 - **Registrar:** escríbele normal lo que hiciste. Puedes hacerlo por partes
   (algo en la mañana, completar en la noche): junta todo en el mismo día.
 - **/resumen:** te muestra tus rachas y % de constancia de la semana.
-- **/ayuda:** recordatorio de qué puede hacer.
+- **/ayuda:** muestra las facetas del coach y qué puede hacer.
 - Él te escribe solo en la **mañana** y en la **noche** (horas configurables).
+
+### Un coach que crece por áreas 🌱
+
+Es **un solo coach** con varias facetas. Hoy está activa la de **salud**; las
+demás llegan en fases siguientes (ver [CLAUDE.md](CLAUDE.md)).
+
+| Comando | Área | Estado |
+|---|---|---|
+| `/salud` | Salud y alimentación (+ Apple Watch) | ✅ Activa (Fase 1) |
+| `/finanzas` | Finanzas personales | 🔒 Fase 2 |
+| `/mente` | Mentalidad y crecimiento | 🔒 Fase 3 |
+| `/negocio` | Negocio y clientes | 🔒 Fase 3 |
+| `/diario` | Diario y reflexión | 🔒 Fase 4 |
+
+## 🧪 Para desarrolladores
+
+```bash
+pip install -r requirements-dev.txt
+python -m pytest -q
+```
 
 ---
 
