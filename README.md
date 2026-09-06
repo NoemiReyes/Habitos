@@ -75,13 +75,25 @@ cp .env.example .env
 Abre `.env` y pega tu `TELEGRAM_TOKEN`, `NOTION_TOKEN` y `ANTHROPIC_API_KEY`.
 (El `NOTION_DATABASE_ID` lo obtienes en el siguiente paso.)
 
-### 5) Crea la tabla en Notion automáticamente
+### 5) Crea tus tablas en Notion automáticamente
 
 ```bash
 python setup_notion.py <ID_de_tu_pagina>
 ```
 
-Te imprimirá una línea `NOTION_DATABASE_ID=...`. **Cópiala y pégala en tu `.env`.**
+Crea **4 tablas** dentro de tu página (una por cada fase del proyecto) y te
+imprime sus IDs. **Copia las líneas que te da y pégalas en tu `.env`.**
+
+| Tabla | Para qué | ¿La usa el bot hoy? |
+|---|---|---|
+| **Día** | Hábitos diarios (salud, sueño, ejercicio…) | ✅ Sí (Fase 1) |
+| **Finanzas** | Gastos, ingresos y ahorro | 🔒 Fase 2 |
+| **Aprendizajes** | Lecturas, cursos, clientes | 🔒 Fase 3 |
+| **Diario** | Reflexiones y ánimo | 🔒 Fase 4 |
+
+> Dejamos tu Notion completo desde el inicio. Las 3 tablas de fases futuras
+> quedan creadas y vacías; el bot empezará a llenarlas cuando construyamos
+> cada fase.
 
 ### 6) ¡Enciende el bot!
 

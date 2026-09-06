@@ -16,7 +16,11 @@ load_dotenv()  # lee las variables secretas del archivo .env
 # ---------------------------------------------------------------------------
 TELEGRAM_TOKEN = os.getenv("TELEGRAM_TOKEN", "")
 NOTION_TOKEN = os.getenv("NOTION_TOKEN", "")
-NOTION_DATABASE_ID = os.getenv("NOTION_DATABASE_ID", "")
+NOTION_DATABASE_ID = os.getenv("NOTION_DATABASE_ID", "")  # tabla "Día" (Fase 1)
+# IDs de las tablas de fases futuras (opcionales por ahora, se usarán después).
+NOTION_DB_FINANZAS = os.getenv("NOTION_DB_FINANZAS", "")
+NOTION_DB_APRENDIZAJES = os.getenv("NOTION_DB_APRENDIZAJES", "")
+NOTION_DB_DIARIO = os.getenv("NOTION_DB_DIARIO", "")
 # La API de Claude toma la clave de ANTHROPIC_API_KEY automáticamente.
 
 # Modelo del "coach". Opus 5 es el más capaz y empático.
@@ -98,6 +102,7 @@ def area_por_clave(clave: str) -> dict | None:
 # Deben coincidir EXACTAMENTE con las propiedades de tu base.
 # El script setup_notion.py crea la base con estos nombres automáticamente.
 # ---------------------------------------------------------------------------
+# --- Tabla "Día" (Fase 1 — la que usa el bot HOY) ---
 PROP = {
     "fecha": "Fecha",             # título (texto con la fecha, ej. 2026-08-28)
     "levantarse": "Levantarse",   # texto, ej. "07:10"
@@ -109,4 +114,39 @@ PROP = {
     "animo": "Ánimo",             # select: Bien / Neutral / Mal
     "puntaje": "Puntaje",         # número 0-100
     "notas": "Notas",             # texto
+}
+
+# ---------------------------------------------------------------------------
+# Tablas de las FASES FUTURAS (estructura inicial; se afinará al construir
+# cada fase). setup_notion.py las crea todas de una vez para dejar tu Notion
+# completo, aunque el bot todavía solo escribe en la tabla "Día".
+# ---------------------------------------------------------------------------
+
+# --- Tabla "Finanzas" (Fase 2) — una fila por movimiento ---
+PROP_FINANZAS = {
+    "concepto": "Concepto",   # título, ej. "Súper"
+    "fecha": "Fecha",         # fecha
+    "tipo": "Tipo",           # select: Gasto / Ingreso / Ahorro
+    "monto": "Monto",         # número
+    "categoria": "Categoría", # select
+    "nota": "Nota",           # texto
+}
+
+# --- Tabla "Aprendizajes" (Fase 3 — mente + negocio) — una fila por entrada ---
+PROP_APRENDIZAJES = {
+    "titulo": "Título",       # título, ej. "Cap. 3 de Hábitos Atómicos"
+    "fecha": "Fecha",         # fecha
+    "area": "Área",           # select: Lectura / Curso / Cliente / Prospecto / Hábito
+    "detalle": "Detalle",     # texto
+    "avance": "Avance",       # texto, ej. "20 páginas"
+    "nota": "Nota",           # texto
+}
+
+# --- Tabla "Diario" (Fase 4) — una fila por día/reflexión ---
+PROP_DIARIO = {
+    "fecha": "Fecha",             # título (texto con la fecha)
+    "animo": "Ánimo",             # select: Bien / Neutral / Mal
+    "entrada": "Entrada",         # texto: lo que escribiste
+    "tema": "Tema",               # select: Emociones / Gratitud / Reto / Logro / Reflexión
+    "aprendizaje": "Aprendizaje", # texto
 }
